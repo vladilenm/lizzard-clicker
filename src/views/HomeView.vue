@@ -3,21 +3,28 @@
     <ScoreProgress />
     <div class="header">
       <img src="../assets/coin.png" alt="coin" />
-      <h2 class="score" id="score">42</h2>
+      <h2 class="score" id="score">{{ store.score }}</h2>
     </div>
     <div class="circle">
-      <img @click="increment" ref="img" id="circle" src="../assets/frog.png" />
+      <img @click="increment" ref="img" id="circle" :src="imgSrc" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import ScoreProgress from '@/components/ScoreProgress.vue'
+import { useScoreStore } from '@/stores/score'
+import frog from '@/assets/frog.png'
+import lizard from '@/assets/lizzard.png'
 
 const img = ref(null)
+const imgSrc = computed(() => (store.score > 25 ? lizard : frog))
+
+const store = useScoreStore()
 
 function increment(event) {
+  store.add(1)
   const rect = event.target.getBoundingClientRect()
 
   const offfsetX = event.clientX - rect.left - rect.width / 2
